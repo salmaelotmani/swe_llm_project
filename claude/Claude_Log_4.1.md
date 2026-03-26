@@ -1,5 +1,6 @@
 Claude Log
 
+
 main.py
 Read assignment 1, summarize what the project is intended to do,how it should be run, and which APIs, commands, and libraries are used.
 Let me read the assignment 1 files to understand the project.
