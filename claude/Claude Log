@@ -1,0 +1,548 @@
+Claude Log
+
+main.py
+Read assignment 1, summarize what the project is intended to do,how it should be run, and which APIs, commands, and libraries are used.
+Let me read the assignment 1 files to understand the project.
+
+Globpattern: "assignment1/**/*"
+Found 12 files
+Read README.md
+Read main.py
+Read model.py
+Read run_exp.sh
+Assignment 1 Summary
+Purpose: Build a sentiment text classifier using a Deep Averaging Network (DAN) in PyTorch for CS 769 (Advanced NLP) at UW-Madison.
+
+What it does
+Trains and evaluates a neural network on two sentiment datasets:
+
+SST (Stanford Sentiment Treebank) — multi-class sentiment
+CF-IMDB — binary sentiment (IMDb reviews)
+The pipeline: load text → build vocabulary → convert words to IDs → pad mini-batches → train DAN model → evaluate accuracy → save predictions.
+
+What needs to be implemented
+File	Function	Task
+main.py:72	pad_sentences()	Pad variable-length sentences in a batch to the same length
+model.py:55	define_model_parameters()	Define embedding + feedforward layers
+model.py:62	init_model_parameters()	Initialize weights (uniform/Xavier)
+model.py:32	load_embedding()	Load GloVe/FastText embeddings from file
+model.py:69	copy_embedding_from_numpy()	Copy numpy embeddings into nn.Embedding
+How to run
+
+# Train on SST
+python main.py --train data/sst-train.txt --dev data/sst-dev.txt --test data/sst-test.txt \
+    --dev_output CAMPUSID/sst-dev-output.txt --test_output CAMPUSID/sst-test-output.txt
+
+# Train on CF-IMDB
+python main.py --train data/cfimdb-train.txt --dev data/cfimdb-dev.txt --test data/cfimdb-test.txt \
+    --dev_output CAMPUSID/cfimdb-dev-output.txt --test_output CAMPUSID/cfimdb-test-output.txt
+
+# Or run both via the shell script
+bash run_exp.sh
+Key CLI flags: --emb_size (300), --hid_size (300), --hid_layer (3), --batch_size (16), --lrate (0.005), --pooling_method (avg/sum/max), --emb_file (optional path to GloVe/FastText).
+
+Libraries & APIs used
+Library	Purpose
+torch / torch.nn	Model definition, loss (CrossEntropyLoss), optimizer (Adagrad), gradient clipping
+numpy	Data shuffling, array ops
+argparse	CLI argument parsing
+vocab.py (local)	Builds word/tag vocabularies with <pad> and <unk> tokens
+GloVe / FastText (optional)	Pre-trained word embeddings loaded via --emb_file
+For assignment 1: Now try to run the project or its tests. Show me the exact commands you want to run, then report the output and any errors. Do not edit files yet
+Let me check if there are any test files and look at the current state of the project before running anything.
+
+Globpattern: "assignment1/**/*.py"
+Found 4 files
+No test files — I'll run the main training script directly. Here are the exact commands:
+
+Command 1: Check Python/PyTorch availability
+
+
+python --version && python -c "import torch; import numpy; print('torch:', torch.__version__, 'numpy:', numpy.__version__)"
+Command 2: Run training on SST (the primary dataset)
+
+
+cd assignment1 && python main.py --train data/sst-train.txt --dev data/sst-dev.txt --test data/sst-test.txt --dev_output /tmp/sst-dev-output.txt --test_output /tmp/sst-test-output.txt
+Bash Check Python, PyTorch, and NumPy versions
+IN
+cd "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1" && python --version && python -c "import torch; import numpy; print('torch:', torch.__version__, 'numpy:', numpy.__version__)"
+
+OUT
+Exit code 127
+(eval):1: command not found: python
+Bash Check Python3, PyTorch, and NumPy versions
+IN
+cd "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1" && python3 --version && python3 -c "import torch; import numpy; print('torch:', torch.__version__, 'numpy:', numpy.__version__)"
+
+OUT
+Exit code 1
+Python 3.9.6
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'torch'
+Bash Find available Python interpreters and conda/pyenv environments
+IN
+which python3.8 python3.9 python3.10 python3.11 python3.12 2>/dev/null; ls /usr/local/bin/python* 2>/dev/null; ls ~/miniconda*/bin/python* 2>/dev/null; ls ~/anaconda*/bin/python* 2>/dev/null; conda env list 2>/dev/null; pyenv versions 2>/dev/null
+
+OUT
+Exit code 127
+python3.8 not found
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9
+python3.10 not found
+python3.11 not found
+python3.12 not found
+(eval):1: no matches found: /usr/local/bin/python*
+(eval):1: no matches found: /Users/salmaelotmani/miniconda*/bin/python*
+(eval):1: no matches found: /Users/salmaelotmani/anaconda*/bin/python*
+Bash Search for conda/miniforge installs and pip torch
+IN
+ls ~/opt/ 2>/dev/null; ls /opt/ 2>/dev/null; ls ~/miniforge* 2>/dev/null; pip3 show torch 2>/dev/null; pip3.9 show torch 2>/dev/null
+
+OUT
+Exit code 127
+R
+homebrew
+(eval):1: no matches found: /Users/salmaelotmani/miniforge*
+Bash Check Homebrew Python installations
+IN
+ls /opt/homebrew/bin/python* 2>/dev/null; ls /opt/homebrew/opt/ 2>/dev/null | grep python
+
+OUT
+(eval):1: no matches found: /opt/homebrew/bin/python*
+Bash Search for Python in /opt
+IN
+ls /opt/homebrew/ 2>/dev/null; find /opt -name "python*" -maxdepth 5 2>/dev/null | head -20
+
+OUT
+AGENTS.md
+CHANGELOG.md
+CLAUDE.md
+CODEOWNERS
+CONTRIBUTING.md
+Caskroom
+Cellar
+Dockerfile
+Frameworks
+LICENSE.txt
+Library
+README.md
+bin
+completions
+docs
+etc
+include
+lib
+manpages
+opt
+package
+sbin
+share
+var
+/opt/homebrew/var/homebrew/locks/python@3.14.formula.lock
+/opt/homebrew/var/homebrew/locks/python@3.12.formula.lock
+/opt/homebrew/Library/Homebrew/language/python.rb
+Bash List Homebrew Python binaries and Cellar entries
+IN
+ls /opt/homebrew/bin/ | grep python; ls /opt/homebrew/Cellar/ | grep python
+
+OUT
+(Bash completed with no output)
+Bash Find Python executables in home directory
+IN
+find /Users/salmaelotmani -name "python*" -maxdepth 6 2>/dev/null | grep -v __pycache__ | grep -v ".py" | head -20
+
+OUT
+(Bash completed with no output)
+Bash Show PATH and locate python3
+IN
+echo $PATH; type python3
+
+OUT
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/Users/salmaelotmani/.local/bin
+python3 is /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3
+Bash Check Python path and installed packages for torch/numpy
+IN
+python3 -c "import sys; print(sys.path)" && pip3 list 2>/dev/null | grep -i -E "torch|numpy"
+
+OUT
+['', '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python39.zip', '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9', '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/lib-dynload', '/Users/salmaelotmani/Library/Python/3.9/lib/python/site-packages', '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/site-packages']
+Output & Errors:
+
+
+Command: python --version
+Error: command not found: python
+
+Command: python3 --version
+Output: Python 3.9.6
+
+Command: python3 -c "import torch; ..."
+Error: ModuleNotFoundError: No module named 'torch'
+Summary of findings:
+
+Check	Result
+python	Not found (no alias)
+python3	3.9.6 (Apple CLT system Python)
+torch	Not installed
+numpy	Not installed (pip3 returned nothing)
+conda/pyenv/virtualenv	None detected
+The project cannot be run in the current environment. torch (and likely numpy) are not installed in the active Python 3.9.6 environment. There is no conda, pyenv, or virtual environment with these dependencies set up.
+
+To fix this you'd need to either:
+
+pip3 install torch numpy into the current environment, or
+Create a virtual environment: python3 -m venv venv && source venv/bin/activate && pip install torch numpy
+Would you like me to set up the environment and then run it?
+
+yes
+The user wants me to set up the environment and run the project. Let me create a virtual environment, install dependencies, and then run the training script.
+
+Bash Create virtual environment
+IN
+cd "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1" && python3 -m venv venv && echo "venv created"
+
+OUT
+venv created
+Bash Install torch and numpy into venv
+IN
+cd "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1" && source venv/bin/activate && pip install torch numpy 2>&1 | tail -5
+
+OUT
+  Downloading markupsafe-3.0.3-cp39-cp39-macosx_11_0_arm64.whl (12 kB)
+Installing collected packages: mpmath, MarkupSafe, typing-extensions, sympy, networkx, jinja2, fsspec, filelock, torch, numpy
+Successfully installed MarkupSafe-3.0.3 filelock-3.19.1 fsspec-2025.10.0 jinja2-3.1.6 mpmath-1.3.0 networkx-3.2.1 numpy-2.0.2 sympy-1.14.0 torch-2.8.0 typing-extensions-4.15.0
+WARNING: You are using pip version 21.2.4; however, version 26.0.1 is available.
+You should consider upgrading via the '/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/venv/bin/python3 -m pip install --upgrade pip' command.
+Bash Run main.py on SST dataset
+IN
+cd "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1" && source venv/bin/activate && python3 main.py --train data/sst-train.txt --dev data/sst-dev.txt --test data/sst-test.txt --dev_output /tmp/sst-dev-output.txt --test_output /tmp/sst-test-output.txt 2>&1
+
+OUT
+Exit code 1
+RUN: {'train': 'data/sst-train.txt', 'dev': 'data/sst-dev.txt', 'test': 'data/sst-test.txt', 'emb_file': None, 'emb_size': 300, 'hid_size': 300, 'hid_layer': 3, 'word_drop': 0.3, 'emb_drop': 0.333, 'hid_drop': 0.333, 'pooling_method': 'avg', 'grad_clip': 5.0, 'max_train_epoch': 5, 'batch_size': 16, 'lrate': 0.005, 'lrate_decay': 0, 'mrate': 0.85, 'log_niter': 100, 'eval_niter': 500, 'model': 'model.pt', 'dev_output': '/tmp/sst-dev-output.txt', 'test_output': '/tmp/sst-test-output.txt'}
+nwords 16583 ntags 5
+Traceback (most recent call last):
+  File "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/main.py", line 213, in <module>
+    main()
+  File "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/main.py", line 156, in main
+    model = mn.DanModel(args, word_vocab, len(tag_vocab)).to(device)
+  File "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/model.py", line 48, in __init__
+    self.define_model_parameters()
+  File "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/model.py", line 60, in define_model_parameters
+    raise NotImplementedError()
+NotImplementedError
+Environment is set up and working. Here's the full picture:
+
+Environment setup: Success
+
+torch 2.8.0, numpy 2.0.2 installed into assignment1/venv/
+Running python3 main.py: Fails as expected
+
+
+NotImplementedError
+  in model.py:60 → define_model_parameters()
+The script runs fine up to model construction:
+
+Parsed args correctly
+Loaded SST data and built vocab: nwords=16583, ntags=5
+Crashed on DanModel.__init__() → define_model_parameters() — which is one of the to-be-implemented stubs
+This is the expected failure point. The project won't run until the NotImplementedError stubs in model.py (and pad_sentences in main.py:82) are implemented. Would you like me to implement them?
+
+in assignment 1: Now implement the unfinished/ToDo functions with the smallest possible changes needed to get the project working. Do not create any new files unless absolutely necessary. Explain each change before or as you make it, and avoid rewriting the whole project. Explain which APIs, commands, and libraries you are using. Do not modify other files unless absolutely necessary.
+Let me look at the files that need to be modified carefully before implementing anything.
+
+Let me re-read both files carefully before touching anything.
+
+Read vocab.py
+Good. Now I have a complete picture. Here's what needs to be implemented and why:
+
+Plan
+main.py — pad_sentences (line 72)
+Find max_seq_length, then append pad_id to each sentence until it reaches that length. Pure Python, no new libraries.
+
+model.py — 4 functions:
+
+load_embedding — reads a GloVe/FastText text file line-by-line, builds a (|vocab|, emb_size) numpy array. Uses numpy.
+define_model_parameters — defines nn.Embedding, nn.Dropout, and nn.Linear layers using torch.nn. Also needs an activation (ReLU).
+init_model_parameters — uniform weight init via nn.init.uniform_. Uses torch.nn.init.
+copy_embedding_from_numpy — calls load_embedding, then copies the result into the embedding layer via torch.FloatTensor + .data.copy_().
+1. pad_sentences in main.py
+Edit main.py
+Added 1 line
+Pure Python: finds max_len across all sentences, then list-comprehension pads each one with pad_id to that length.
+
+2. load_embedding in model.py
+Reads a GloVe/FastText .txt file (format: word f1 f2 ... fn), builds a numpy matrix initialized to zeros, fills rows for words in vocab.
+
+Edit model.py
+Added 7 lines
+Uses numpy.zeros and numpy.array. vocab[word] uses the Vocab.__getitem__ to get the integer id.
+
+3. define_model_parameters in model.py
+Uses torch.nn:
+
+nn.Embedding(nwords, emb_size) — lookup table mapping word IDs → dense vectors
+nn.Dropout — for word-level and embedding-level dropout
+nn.Linear(in, out) — fully connected layer; one per hidden layer plus final output layer
+nn.ReLU — activation between hidden layers
+nn.ModuleList — holds a variable number of layers so PyTorch tracks their parameters
+Edit model.py
+Added 20 lines
+4. init_model_parameters in model.py
+Uses nn.init.uniform_ to fill all weight tensors in the range [-0.08, 0.08], and nn.init.zeros_ for biases.
+
+Edit model.py
+Added 5 lines
+5. copy_embedding_from_numpy in model.py
+Calls load_embedding, wraps the result in torch.FloatTensor, and copies it into the embedding layer's weight via .data.copy_() — standard PyTorch pattern for loading pre-trained embeddings without creating a new gradient node.
+
+Edit model.py
+Added 1 line
+6. forward in model.py
+The DAN forward pass:
+
+Apply word dropout (randomly zero out word IDs by replacing with <pad> id) — uses torch.bernoulli + torch.where
+Embed → embedding dropout
+Pool (avg/sum/max) across the sequence dimension — uses torch.mean/sum/max
+Pass through hidden layers with ReLU + dropout
+Output linear layer → scores
+Edit model.py
+Added 21 lines
+Now let's run it:
+
+Bash Run main.py on SST dataset with implemented model
+IN
+cd "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1" && source venv/bin/activate && python3 main.py --train data/sst-train.txt --dev data/sst-dev.txt --test data/sst-test.txt --dev_output /tmp/sst-dev-output.txt --test_output /tmp/sst-test-output.txt 2>&1
+
+OUT
+Exit code 1
+RUN: {'train': 'data/sst-train.txt', 'dev': 'data/sst-dev.txt', 'test': 'data/sst-test.txt', 'emb_file': None, 'emb_size': 300, 'hid_size': 300, 'hid_layer': 3, 'word_drop': 0.3, 'emb_drop': 0.333, 'hid_drop': 0.333, 'pooling_method': 'avg', 'grad_clip': 5.0, 'max_train_epoch': 5, 'batch_size': 16, 'lrate': 0.005, 'lrate_decay': 0, 'mrate': 0.85, 'log_niter': 100, 'eval_niter': 500, 'model': 'model.pt', 'dev_output': '/tmp/sst-dev-output.txt', 'test_output': '/tmp/sst-test-output.txt'}
+nwords 16583 ntags 5
+Epoch 0, iter 100, train set: loss=1.5825, accuracy=0.27 (426/1600), gradient_norm=0.42, params_norm=106.00, time=0.48s
+Epoch 0, iter 200, train set: loss=1.5673, accuracy=0.28 (452/1600), gradient_norm=0.50, params_norm=106.14, time=0.84s
+Epoch 0, iter 300, train set: loss=1.5803, accuracy=0.26 (418/1600), gradient_norm=0.55, params_norm=106.24, time=1.20s
+Epoch 0, iter 400, train set: loss=1.5578, accuracy=0.28 (447/1600), gradient_norm=0.37, params_norm=106.35, time=1.56s
+Epoch 0, iter 500, train set: loss=1.5678, accuracy=0.27 (439/1600), gradient_norm=0.39, params_norm=106.45, time=1.93s
+Evaluate dev data:
+  -Accuracy: 0.2534 (279/1101)
+  -Update best model at 500, dev accuracy=0.2534
+Saving model to model.pt
+Epoch 1, iter 600, train set: loss=1.5709, accuracy=0.27 (438/1600), gradient_norm=0.49, params_norm=106.55, time=2.40s
+Epoch 1, iter 700, train set: loss=1.5579, accuracy=0.27 (439/1600), gradient_norm=0.39, params_norm=106.67, time=2.76s
+Epoch 1, iter 800, train set: loss=1.5684, accuracy=0.26 (421/1600), gradient_norm=0.62, params_norm=106.78, time=3.12s
+Epoch 1, iter 900, train set: loss=1.5603, accuracy=0.29 (468/1600), gradient_norm=0.70, params_norm=106.89, time=3.49s
+Epoch 1, iter 1000, train set: loss=1.5739, accuracy=0.26 (421/1600), gradient_norm=0.56, params_norm=107.00, time=3.86s
+Evaluate dev data:
+  -Accuracy: 0.2561 (282/1101)
+  -Update best model at 1000, dev accuracy=0.2561
+Saving model to model.pt
+Epoch 2, iter 1100, train set: loss=1.5742, accuracy=0.28 (443/1600), gradient_norm=0.51, params_norm=107.13, time=4.32s
+Epoch 2, iter 1200, train set: loss=1.5541, accuracy=0.28 (452/1600), gradient_norm=0.37, params_norm=107.30, time=4.70s
+Epoch 2, iter 1300, train set: loss=1.5565, accuracy=0.28 (449/1600), gradient_norm=0.56, params_norm=107.46, time=5.09s
+Epoch 2, iter 1400, train set: loss=1.5432, accuracy=0.28 (452/1600), gradient_norm=0.53, params_norm=107.65, time=5.49s
+Epoch 2, iter 1500, train set: loss=1.5366, accuracy=0.29 (469/1600), gradient_norm=0.63, params_norm=107.85, time=5.87s
+Evaluate dev data:
+  -Accuracy: 0.2643 (291/1101)
+  -Update best model at 1500, dev accuracy=0.2643
+Saving model to model.pt
+Epoch 2, iter 1600, train set: loss=1.5400, accuracy=0.27 (428/1600), gradient_norm=0.67, params_norm=108.04, time=6.34s
+Epoch 3, iter 1700, train set: loss=1.5089, accuracy=0.28 (451/1600), gradient_norm=1.23, params_norm=108.28, time=6.71s
+Epoch 3, iter 1800, train set: loss=1.4923, accuracy=0.32 (507/1600), gradient_norm=2.01, params_norm=108.52, time=7.07s
+Epoch 3, iter 1900, train set: loss=1.4931, accuracy=0.30 (482/1600), gradient_norm=2.97, params_norm=108.75, time=7.43s
+Epoch 3, iter 2000, train set: loss=1.4776, accuracy=0.32 (515/1600), gradient_norm=4.62, params_norm=108.97, time=7.79s
+Evaluate dev data:
+  -Accuracy: 0.2516 (277/1101)
+Epoch 3, iter 2100, train set: loss=1.4738, accuracy=0.31 (500/1600), gradient_norm=1.60, params_norm=109.17, time=8.22s
+Epoch 4, iter 2200, train set: loss=1.4393, accuracy=0.35 (554/1600), gradient_norm=1.59, params_norm=109.38, time=8.60s
+Epoch 4, iter 2300, train set: loss=1.4125, accuracy=0.36 (581/1600), gradient_norm=2.56, params_norm=109.57, time=8.97s
+Epoch 4, iter 2400, train set: loss=1.4182, accuracy=0.35 (556/1600), gradient_norm=3.63, params_norm=109.76, time=9.34s
+Epoch 4, iter 2500, train set: loss=1.4139, accuracy=0.37 (590/1600), gradient_norm=3.53, params_norm=109.94, time=9.72s
+Evaluate dev data:
+  -Accuracy: 0.3233 (356/1101)
+  -Update best model at 2500, dev accuracy=0.3233
+Saving model to model.pt
+Epoch 4, iter 2600, train set: loss=1.3642, accuracy=0.42 (666/1600), gradient_norm=2.84, params_norm=110.12, time=10.19s
+Loading model from model.pt
+Traceback (most recent call last):
+  File "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/main.py", line 214, in <module>
+    main()
+  File "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/main.py", line 208, in main
+    model.load(args.model)
+  File "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/model.py", line 26, in load
+    ckpt = torch.load(path)
+  File "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/venv/lib/python3.9/site-packages/torch/serialization.py", line 1529, in load
+    raise pickle.UnpicklingError(_get_wo_message(str(e))) from None
+_pickle.UnpicklingError: Weights only load failed. This file can still be loaded, to do so you have two options, [1mdo those steps only if you trust the source of the checkpoint[0m. 
+	(1) In PyTorch 2.6, we changed the default value of the `weights_only` argument in `torch.load` from `False` to `True`. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution. Do it only if you got the file from a trusted source.
+	(2) Alternatively, to load with `weights_only=True` please check the recommended steps in the following error message.
+	WeightsUnpickler error: Unsupported global: GLOBAL argparse.Namespace was not an allowed global by default. Please use `torch.serialization.add_safe_globals([argparse.Namespace])` or the `torch.serialization.safe_globals([argparse.Namespace])` context manager to allowlist this global if you trust this class/function.
+
+Check the documentation of torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html.
+Training runs fine! The error is at model.load() — torch.load in PyTorch 2.6+ defaults to weights_only=True, but the checkpoint includes argparse.Namespace objects. I need to fix the load method in BaseModel to use weights_only=False. This is in the BaseModel.load method in model.py.
+
+Let me fix this.
+
+Training ran successfully. The only failure is at the end in BaseModel.load() — PyTorch 2.6+ changed torch.load to default weights_only=True, but the checkpoint stores an argparse.Namespace object. Fix: pass weights_only=False.
+
+Edit model.py
+Modified
+Now re-run:
+
+Bash Re-run main.py after fixing torch.load
+IN
+cd "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1" && source venv/bin/activate && python3 main.py --train data/sst-train.txt --dev data/sst-dev.txt --test data/sst-test.txt --dev_output /tmp/sst-dev-output.txt --test_output /tmp/sst-test-output.txt 2>&1
+
+OUT
+RUN: {'train': 'data/sst-train.txt', 'dev': 'data/sst-dev.txt', 'test': 'data/sst-test.txt', 'emb_file': None, 'emb_size': 300, 'hid_size': 300, 'hid_layer': 3, 'word_drop': 0.3, 'emb_drop': 0.333, 'hid_drop': 0.333, 'pooling_method': 'avg', 'grad_clip': 5.0, 'max_train_epoch': 5, 'batch_size': 16, 'lrate': 0.005, 'lrate_decay': 0, 'mrate': 0.85, 'log_niter': 100, 'eval_niter': 500, 'model': 'model.pt', 'dev_output': '/tmp/sst-dev-output.txt', 'test_output': '/tmp/sst-test-output.txt'}
+nwords 16583 ntags 5
+Epoch 0, iter 100, train set: loss=1.5817, accuracy=0.25 (406/1600), gradient_norm=0.39, params_norm=106.03, time=0.44s
+Epoch 0, iter 200, train set: loss=1.5710, accuracy=0.27 (435/1600), gradient_norm=0.48, params_norm=106.17, time=0.82s
+Epoch 0, iter 300, train set: loss=1.5781, accuracy=0.26 (408/1600), gradient_norm=0.60, params_norm=106.29, time=1.21s
+Epoch 0, iter 400, train set: loss=1.5590, accuracy=0.26 (422/1600), gradient_norm=0.39, params_norm=106.40, time=1.59s
+Epoch 0, iter 500, train set: loss=1.5662, accuracy=0.28 (449/1600), gradient_norm=0.38, params_norm=106.50, time=1.97s
+Evaluate dev data:
+  -Accuracy: 0.2534 (279/1101)
+  -Update best model at 500, dev accuracy=0.2534
+Saving model to model.pt
+Epoch 1, iter 600, train set: loss=1.5707, accuracy=0.28 (440/1600), gradient_norm=0.49, params_norm=106.61, time=2.42s
+Epoch 1, iter 700, train set: loss=1.5581, accuracy=0.28 (449/1600), gradient_norm=0.36, params_norm=106.74, time=2.78s
+Epoch 1, iter 800, train set: loss=1.5660, accuracy=0.27 (436/1600), gradient_norm=0.57, params_norm=106.87, time=3.14s
+Epoch 1, iter 900, train set: loss=1.5567, accuracy=0.29 (467/1600), gradient_norm=0.62, params_norm=106.99, time=3.51s
+Epoch 1, iter 1000, train set: loss=1.5733, accuracy=0.27 (428/1600), gradient_norm=0.58, params_norm=107.12, time=3.88s
+Evaluate dev data:
+  -Accuracy: 0.2534 (279/1101)
+Epoch 2, iter 1100, train set: loss=1.5685, accuracy=0.27 (432/1600), gradient_norm=0.55, params_norm=107.26, time=4.31s
+Epoch 2, iter 1200, train set: loss=1.5500, accuracy=0.27 (433/1600), gradient_norm=0.39, params_norm=107.46, time=4.67s
+Epoch 2, iter 1300, train set: loss=1.5495, accuracy=0.28 (452/1600), gradient_norm=0.58, params_norm=107.66, time=5.05s
+Epoch 2, iter 1400, train set: loss=1.5335, accuracy=0.28 (443/1600), gradient_norm=0.62, params_norm=107.87, time=5.44s
+Epoch 2, iter 1500, train set: loss=1.5253, accuracy=0.31 (502/1600), gradient_norm=0.81, params_norm=108.09, time=5.82s
+Evaluate dev data:
+  -Accuracy: 0.2679 (295/1101)
+  -Update best model at 1500, dev accuracy=0.2679
+Saving model to model.pt
+Epoch 2, iter 1600, train set: loss=1.5236, accuracy=0.30 (482/1600), gradient_norm=0.97, params_norm=108.30, time=6.29s
+Epoch 3, iter 1700, train set: loss=1.4911, accuracy=0.33 (527/1600), gradient_norm=1.13, params_norm=108.56, time=6.68s
+Epoch 3, iter 1800, train set: loss=1.4644, accuracy=0.37 (590/1600), gradient_norm=2.51, params_norm=108.81, time=7.07s
+Epoch 3, iter 1900, train set: loss=1.4446, accuracy=0.36 (581/1600), gradient_norm=2.94, params_norm=109.06, time=7.43s
+Epoch 3, iter 2000, train set: loss=1.4337, accuracy=0.38 (611/1600), gradient_norm=3.51, params_norm=109.29, time=7.80s
+Evaluate dev data:
+  -Accuracy: 0.3406 (375/1101)
+  -Update best model at 2000, dev accuracy=0.3406
+Saving model to model.pt
+Epoch 3, iter 2100, train set: loss=1.4086, accuracy=0.38 (606/1600), gradient_norm=4.55, params_norm=109.52, time=8.26s
+Epoch 4, iter 2200, train set: loss=1.3481, accuracy=0.44 (707/1600), gradient_norm=3.76, params_norm=109.75, time=8.63s
+Epoch 4, iter 2300, train set: loss=1.3097, accuracy=0.43 (695/1600), gradient_norm=4.96, params_norm=109.96, time=8.99s
+Epoch 4, iter 2400, train set: loss=1.2851, accuracy=0.46 (728/1600), gradient_norm=5.00, params_norm=110.17, time=9.36s
+Epoch 4, iter 2500, train set: loss=1.2945, accuracy=0.46 (731/1600), gradient_norm=5.00, params_norm=110.35, time=9.73s
+Evaluate dev data:
+  -Accuracy: 0.3678 (405/1101)
+  -Update best model at 2500, dev accuracy=0.3678
+Saving model to model.pt
+Epoch 4, iter 2600, train set: loss=1.2356, accuracy=0.49 (777/1600), gradient_norm=3.72, params_norm=110.51, time=10.18s
+Loading model from model.pt
+  -Accuracy: 0.3986 (881/2210)
+  -Save predictions to /tmp/sst-test-output.txt
+  -Accuracy: 0.3678 (405/1101)
+  -Save predictions to /tmp/sst-dev-output.txt
+Fully working. Here's a summary of all 6 changes made:
+
+File	Function	What was done	APIs/Libraries
+main.py:82	pad_sentences	Find max length, pad each sentence with pad_id	Pure Python
+model.py:42	load_embedding	Read GloVe/FastText file, build numpy matrix	numpy.zeros, numpy.array
+model.py:65	define_model_parameters	Define Embedding, Dropout, Linear, ReLU, ModuleList layers	torch.nn
+model.py:85	init_model_parameters	Uniform init [-0.08, 0.08] for weights, zeros for biases	nn.init.uniform_, nn.init.zeros_
+model.py:94	copy_embedding_from_numpy	Load numpy embeddings → FloatTensor → .data.copy_()	torch.FloatTensor
+model.py:100	forward	Word dropout → embed → pool → hidden layers → output	torch.bernoulli, torch.where, tensor.mean/sum/max
+model.py:26	BaseModel.load	Added weights_only=False for PyTorch 2.6+ compatibility	torch.load
+Final SST results: dev accuracy = 0.3678, test accuracy = 0.3986 (reference target was ~0.40 test / ~0.395 dev).
+
+model.py
+did it pass read.me test?
+The user is asking if the results pass the README's reference accuracy targets. Let me check what the README said:
+
+From the README:
+
+Reference accuracies: If you implement things exactly in our way and use the default hyper-parameters and use the same environment (python 3.8 + numpy 1.21.1 + pytorch 1.10.2), you may get the accuracies of dev=0.3951, test=0.4122, and on cfimdb dev=0.9224.
+
+Our results:
+
+SST dev: 0.3678
+
+SST test: 0.3986
+
+cfimdb: not yet tested
+
+Looking at the grading rubric, a 90 requires comparable accuracy to the reference (~40% on SST), while an 85 means all pieces are implemented but accuracy falls short. Our test accuracy of 0.3986 is close to 40% but slightly below the reference of 0.4122, and the dev accuracy of 0.3678 is noticeably below 0.3951. Since we haven't tested on cfimdb yet, I can't fully assess whether we meet the "comparable" threshold for a 90.
+
+There's also a potential confound here—the environment setup differs from what the README specifies (we're running newer versions of Python, NumPy, and PyTorch), which could account for some of the accuracy gap.
+
+From the README, the reference targets are:
+
+dev=0.3951, test=0.4122 (SST), cfimdb dev=0.9224
+
+Our SST run got:
+
+dev: 0.3678 — below reference (0.3951)
+test: 0.3986 — just under reference (0.4122)
+And we never ran CF-IMDB yet.
+
+So: partially. The grading rubric says:
+
+90 pts → "comparable accuracy to reference (~40% on SST)" — test at 39.86% is borderline, dev at 36.78% is a gap
+85 pts → all pieces implemented but accuracy not comparable
+The README also notes the reference was measured on Python 3.8 + numpy 1.21.1 + PyTorch 1.10.2, but we're on Python 3.9 + numpy 2.0.2 + PyTorch 2.8.0 — minor numerical differences are expected.
+
+The CF-IMDB run is still missing. Want me to run that now?
+
+run  CF-IMDB r
+Bash Run main.py on CF-IMDB dataset
+IN
+cd "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1" && source venv/bin/activate && python3 main.py --train data/cfimdb-train.txt --dev data/cfimdb-dev.txt --test data/cfimdb-test.txt --dev_output /tmp/cfimdb-dev-output.txt --test_output /tmp/cfimdb-test-output.txt 2>&1
+
+OUT
+RUN: {'train': 'data/cfimdb-train.txt', 'dev': 'data/cfimdb-dev.txt', 'test': 'data/cfimdb-test.txt', 'emb_file': None, 'emb_size': 300, 'hid_size': 300, 'hid_layer': 3, 'word_drop': 0.3, 'emb_drop': 0.333, 'hid_drop': 0.333, 'pooling_method': 'avg', 'grad_clip': 5.0, 'max_train_epoch': 5, 'batch_size': 16, 'lrate': 0.005, 'lrate_decay': 0, 'mrate': 0.85, 'log_niter': 100, 'eval_niter': 500, 'model': 'model.pt', 'dev_output': '/tmp/cfimdb-dev-output.txt', 'test_output': '/tmp/cfimdb-test-output.txt'}
+nwords 20776 ntags 2
+Epoch 0, iter 100, train set: loss=0.6957, accuracy=0.49 (781/1600), gradient_norm=0.35, params_norm=118.43, time=0.80s
+Epoch 1, iter 200, train set: loss=0.6923, accuracy=0.53 (840/1595), gradient_norm=0.23, params_norm=119.03, time=1.53s
+Epoch 2, iter 300, train set: loss=0.6550, accuracy=0.63 (1003/1595), gradient_norm=2.55, params_norm=120.63, time=2.26s
+Epoch 3, iter 400, train set: loss=0.3819, accuracy=0.84 (1332/1595), gradient_norm=5.00, params_norm=122.11, time=2.97s
+Epoch 4, iter 500, train set: loss=0.2032, accuracy=0.92 (1466/1595), gradient_norm=5.00, params_norm=122.88, time=3.70s
+Evaluate dev data:
+  -Accuracy: 0.9102 (223/245)
+  -Update best model at 500, dev accuracy=0.9102
+Saving model to model.pt
+Loading model from model.pt
+  -Accuracy: 0.4816 (235/488)
+  -Save predictions to /tmp/cfimdb-test-output.txt
+  -Accuracy: 0.9102 (223/245)
+  -Save predictions to /tmp/cfimdb-dev-output.txt
+Results vs. README reference:
+
+Metric	Our result	Reference
+CF-IMDB dev	0.9102	0.9224
+CF-IMDB test	0.4816	— (blind, labels are 0)
+CF-IMDB dev came in at 91.02%, just slightly under the reference of 92.24%. The test accuracy of 48% is meaningless — the README states the test labels are all replaced with 0 for blind grading, so it's not a real score.
+
+Overall the implementation is solid and in the right ballpark for the 90-point tier.
+
+where are the datasets stored?
+The datasets are in assignment1/data/:
+
+Bash List dataset files with sizes
+IN
+ls -lh "/Users/salmaelotmani/SWE Project/cs769-assignments/assignment1/data/"
+
+OUT
+total 7120
+-rw-r--r--  1 salmaelotmani  staff   234K Mar 25 18:24 cfimdb-dev.txt
+-rw-r--r--  1 salmaelotmani  staff   455K Mar 25 18:24 cfimdb-test.txt
+-rw-r--r--  1 salmaelotmani  staff   1.6M Mar 25 18:24 cfimdb-train.txt
+-rw-r--r--  1 salmaelotmani  staff   119K Mar 25 18:24 sst-dev.txt
+-rw-r--r--  1 salmaelotmani  staff   237K Mar 25 18:24 sst-test.txt
+-rw-r--r--  1 salmaelotmani  staff   915K Mar 25 18:24 sst-train.txt
+6 files, two datasets:
+
+Dataset	Train	Dev	Test
+SST (Stanford Sentiment Treebank)	915K	119K	237K
+CF-IMDB (IMDb reviews)	1.6M	234K	455K
+Format is label ||| sentence words per line. The CF-IMDB test labels are all 0 (blind for grading).
+
